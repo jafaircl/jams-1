@@ -1,3 +1,5 @@
+import {buildSelector} from "../utils";
+
 export default class Iterator {
   
   constructor (o) {
@@ -6,31 +8,29 @@ export default class Iterator {
     this.selector = o.get;
   }
   
-  _add(selector, method, criteria) {
-    
+  _addMethods(method,criteria, selector){
+  
     for (let i in criteria) {
-      
+
       selector = selector[method](criteria[i]);
     }
-    
+
     return selector;
   }
   
-  get() {
-    
-    this.selector = this._add(this.selector, "withIds", this.props.ids);
-    this.selector = this._add(this.selector, "withCondition", this.props.conditions);
-    
-    return this.selector
-      .forDateRange(this.props.dateRange)
-      .withLimit(this.props.limit)
-      .orderBy(this.props.order)
-      .get();
+  _buildSelector(selector){
+  
+    selector = this._addMethods("withIds", this.props.ids, selector);
+    selector = this._addMethods("withCondition", this.props.conditions, selector);
+
+    return selector.forDateRange(this.props.dateRange)
+      .withLimit(this.props.limits)
+      .orderBy(this.props.orderBy);
   }
   
   run(logic) {
     
-    this._iterator = this.get();
+    this._iterator = this._buildSelector(this.selector).get();
     
     while (this._iterator.hasNext()) {
       

@@ -6,8 +6,8 @@ import replace from "rollup-plugin-replace";
 import uglify from "rollup-plugin-uglify";
 
 export default {
-  entry: "src/index.js",
-  dest: "jams.min.js",
+  entry: "index.js",
+  dest: "output.js",
   format: "es",
   plugins: [
     resolve({
